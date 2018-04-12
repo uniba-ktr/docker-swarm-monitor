@@ -1,0 +1,114 @@
+version: "3.3"
+
+networks:
+  ktrnet:
+
+volumes:
+  grafana-storage: {}
+  prometheus-tsdb: {}
+
+services:
+  nodeexporter:
+    image: unibaktr/nodeexporter:0.15.2
+    networks:
+      - ktrnet
+    environment:
+      - NODE_ID={{.Node.ID}}
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+      - /etc/hostname:/etc/nodename
+    command:
+      - "--path.sysfs=/host/sys"
+      - "--path.procfs=/host/proc"
+      - "--collector.textfile.directory=/etc/node_exporter"
+      - "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+      - "--no-collector.arp"	     # Disable ARP statistics
+      - "--no-collector.bcache"	     # Disable (disk) block cache statistics
+      - "--no-collector.conntrack"   # Disable network filtering statistics
+      - "--no-collector.edac"	     # Disable error detection/correction statistics
+      - "--no-collector.entropy"     # Disable (kernel) randomness bits statistics
+      - "--no-collector.filefd"	     # Disable file descriptor statistics
+      - "--no-collector.infiniband"  # Disable InfiniBand interface statistics
+      - "--no-collector.ipvs"	     # Disable IP Virtual Server statistics
+      - "--no-collector.nfs"         # Disable NFS client statistics
+      - "--no-collector.sockstat"    # Disable (network) socket statistics
+      - "--no-collector.stat"	     # Disable kernel activity statistics
+      - "--no-collector.timex"	     # Disable timex statistics
+      - "--no-collector.uname"	     # Disable kernel name info
+      - "--no-collector.vmstat"      # Disable vmstat statistics
+      - "--no-collector.xfs"         # Disable XFS filesystem statistics
+      - "--no-collector.zfs"         # Disable ZFS statistics
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 16M
+        reservations:
+          memory: 8M
+
+  cadvisor:
+    image: unibaktr/cadvisor:v0.29.1
+    networks:
+      - ktrnet
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    command:
+      - "-allow_dynamic_housekeeping=true"
+      - "-docker_only=true"
+      - "-storage_duration=30s"
+      - "-disable_metrics=disk,network"
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 32M
+        reservations:
+          memory: 16M
+
+  prometheus:
+    image: unibaktr/prometheus:2.2.1
+    networks:
+      - ktrnet
+    ports:
+      - 9090:9090
+    volumes:
+      - ./config/prometheus:/etc/prometheus
+      - prometheus-tsdb:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention=7d"
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          memory: 512M
+
+  grafana:
+    image: fg2it/grafana-armhf:v5.0.4
+    networks:
+      - ktrnet
+    ports:
+      - 3000:3000
+    volumes:
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+      - grafana-storage:/var/lib/grafana
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          memory: 128M
