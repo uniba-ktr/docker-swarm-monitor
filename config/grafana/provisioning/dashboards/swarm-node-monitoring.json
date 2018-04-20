@@ -16,7 +16,6 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
   "iteration": 1523463716760,
   "links": [],
   "panels": [
@@ -30,7 +29,6 @@
         "x": 0,
         "y": 0
       },
-      "id": 6,
       "links": [],
       "pageSize": null,
       "repeat": null,
@@ -147,7 +145,6 @@
         "x": 0,
         "y": 5
       },
-      "id": 2,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -242,7 +239,6 @@
         "x": 0,
         "y": 19
       },
-      "id": 4,
       "legend": {
         "alignAsTable": true,
         "avg": true,
