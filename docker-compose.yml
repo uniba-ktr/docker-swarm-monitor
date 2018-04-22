@@ -32,6 +32,7 @@ services:
       - "--no-collector.filefd"	     # Disable file descriptor statistics
       - "--no-collector.infiniband"  # Disable InfiniBand interface statistics
       - "--no-collector.ipvs"	     # Disable IP Virtual Server statistics
+      - "--no-collector.netstat"     # Disable network statistics
       - "--no-collector.nfs"         # Disable NFS client statistics
       - "--no-collector.sockstat"    # Disable (network) socket statistics
       - "--no-collector.stat"	     # Disable kernel activity statistics
