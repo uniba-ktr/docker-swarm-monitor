@@ -2,7 +2,7 @@
   "annotations": {
     "list": [
       {
-        "$$hashKey": "object:7804",
+        "$$hashKey": "object:141",
         "builtIn": 1,
         "datasource": "-- Grafana --",
         "enable": true,
@@ -17,123 +17,9 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1523463716760,
+  "iteration": 1524383947648,
   "links": [],
   "panels": [
-    {
-      "columns": [],
-      "datasource": "Prometheus",
-      "fontSize": "100%",
-      "gridPos": {
-        "h": 5,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "id": 6,
-      "links": [],
-      "pageSize": null,
-      "repeat": null,
-      "repeatDirection": "h",
-      "scroll": false,
-      "showHeader": true,
-      "sort": {
-        "col": null,
-        "desc": false
-      },
-      "styles": [
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "pattern": "Time",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "pattern": "__name__",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "pattern": "container_label_com_docker_swarm_node_id",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "pattern": "job",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "",
-          "colorMode": null,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "pattern": "Value",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        }
-      ],
-      "targets": [
-        {
-          "expr": "node_meta{instance=~\"$instance_ip\"}",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Node association",
-      "transform": "table",
-      "transparent": true,
-      "type": "table"
-    },
     {
       "aliasColors": {},
       "bars": false,
@@ -142,10 +28,10 @@
       "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
-        "h": 14,
-        "w": 24,
+        "h": 12,
+        "w": 12,
         "x": 0,
-        "y": 5
+        "y": 0
       },
       "id": 2,
       "legend": {
@@ -174,17 +60,19 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "100 - (avg by (instance) (irate(node_cpu{mode=\"idle\",instance=~\"$instance_ip\"}[$interval])) *100)",
+          "$$hashKey": "object:537",
+          "expr": "100-(avg by(instance)(irate(node_cpu{mode=\"idle\",instance=~\"$instance_ip\"}[$interval]))*on(instance)group_left(node_id,node_name)node_meta{instance=~\"$instance_ip\"})*100",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "node {{instance}} overall",
+          "legendFormat": "node:{{node_name}}.{{node_id}}",
           "refId": "A"
         },
         {
-          "expr": "sum(irate(container_cpu_usage_seconds_total{name=~\".+\",instance=~\"$instance_ip\"}[$interval])) by (name) *25",
+          "$$hashKey": "object:538",
+          "expr": "sum(irate(container_cpu_usage_seconds_total{name=~\".+\",instance=~\"$instance_ip\"}[$interval]))by(name)*25",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 1,
@@ -195,7 +83,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "CPU usage overview (Host and Container)",
+      "title": "CPU usage",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -237,10 +125,10 @@
       "datasource": "Prometheus",
       "fill": 1,
       "gridPos": {
-        "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 19
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 0
       },
       "id": 4,
       "legend": {
@@ -268,13 +156,15 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "node_memory_MemTotal{instance=~\"$instance_ip\"} - node_memory_MemAvailable{instance=~\"$instance_ip\"} ",
+          "$$hashKey": "object:415",
+          "expr": "(node_memory_MemTotal{instance=~\"$instance_ip\"}-node_memory_MemAvailable{instance=~\"$instance_ip\"})*on(instance)group_left(node_id,node_name)node_meta{instance=~\"$instance_ip\"}",
           "format": "time_series",
           "intervalFactor": 1,
-          "legendFormat": "node {{instance}} overall",
+          "legendFormat": "node:{{node_name}}.{{node_id}}",
           "refId": "A"
         },
         {
+          "$$hashKey": "object:416",
           "expr": "container_memory_rss{instance=~\"$instance_ip\",name!=\"\"}",
           "format": "time_series",
           "intervalFactor": 1,
@@ -285,7 +175,7 @@
       "thresholds": [],
       "timeFrom": null,
       "timeShift": null,
-      "title": "RAM usage overview (Host and Container)",
+      "title": "RAM usage",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -318,6 +208,374 @@
           "show": true
         }
       ]
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 0,
+        "y": 12
+      },
+      "id": 10,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "$$hashKey": "object:1720",
+          "expr": "sum(irate(node_network_receive_bytes{instance=~\"$instance_ip\"}[$interval]))by(instance)*on(instance)group_left(node_id,node_name)node_meta{instance=~\"$instance_ip\"}*0.008",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "node:{{node_name}}.{{node_id}}",
+          "refId": "A"
+        },
+        {
+          "$$hashKey": "object:1721",
+          "expr": "sum(irate(container_network_receive_bytes_total{name=~\".+\",instance=~\"$instance_ip\"}[$interval]))by(name)*0.008",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Incoming network traffic",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "Kbits",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ]
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 12
+      },
+      "id": 9,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "$$hashKey": "object:1720",
+          "expr": "sum(irate(node_network_transmit_bytes{instance=~\"$instance_ip\"}[$interval]))by(instance)*on(instance)group_left(node_id,node_name)node_meta{instance=~\"$instance_ip\"}*0.008",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "node:{{node_name}}.{{node_id}}",
+          "refId": "A"
+        },
+        {
+          "$$hashKey": "object:1721",
+          "expr": "sum(irate(container_network_transmit_bytes_total{name=~\".+\",instance=~\"$instance_ip\"}[$interval]))by(name)*0.008",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Outgoing network traffic",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "Kbits",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ]
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 0,
+        "y": 23
+      },
+      "id": 8,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "$$hashKey": "object:1720",
+          "expr": "sum(irate(node_disk_bytes_read{instance=~\"$instance_ip\"}[$interval]))by(instance)*on(instance)group_left(node_id,node_name)node_meta{instance=~\"$instance_ip\"}*0.001",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "node:{{node_name}}.{{node_id}}",
+          "refId": "A"
+        },
+        {
+          "$$hashKey": "object:1721",
+          "expr": "sum(irate(container_fs_reads_bytes_total{name=~\".+\",instance=~\"$instance_ip\"}[$interval]))by(name)*0.001",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Disk/Filesystem reads",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:2575",
+          "format": "KBs",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:2576",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ]
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fill": 1,
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 23
+      },
+      "id": 11,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "$$hashKey": "object:1720",
+          "expr": "sum(irate(node_disk_bytes_written{instance=~\"$instance_ip\"}[$interval]))by(instance)*on(instance)group_left(node_id,node_name)node_meta{instance=~\"$instance_ip\"}*0.001",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "node:{{node_name}}.{{node_id}}",
+          "refId": "A"
+        },
+        {
+          "$$hashKey": "object:1721",
+          "expr": "sum(irate(container_fs_writes_bytes_total{name=~\".+\",instance=~\"$instance_ip\"}[$interval]))by(name)*0.001",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Disk/Filesystem writes",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "transparent": true,
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:2575",
+          "format": "KBs",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:2576",
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ]
     }
   ],
   "refresh": "30s",
@@ -336,15 +594,15 @@
         "auto_count": 30,
         "auto_min": "10s",
         "current": {
-          "text": "30s",
-          "value": "30s"
+          "text": "5m",
+          "value": "5m"
         },
         "hide": 0,
         "label": "Interval",
         "name": "interval",
         "options": [
           {
-            "selected": true,
+            "selected": false,
             "text": "30s",
             "value": "30s"
           },
@@ -359,7 +617,7 @@
             "value": "2m"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "5m",
             "value": "5m"
           },
@@ -398,20 +656,20 @@
         "current": {
           "tags": [
             {
-              "$$hashKey": "object:7899",
+              "$$hashKey": "object:2640",
               "selected": true,
-              "text": "yjo6gkaxm3pax2db6bgzt1t91",
+              "text": "wfxyjeqmztylider9a0mcwo2g",
               "values": [
-                "10.0.0.14:8080",
-                "10.0.0.10:9100"
+                "10.0.0.15:8080",
+                "10.0.0.12:9100"
               ],
-              "valuesText": "10.0.0.14:8080 + 10.0.0.10:9100"
+              "valuesText": "10.0.0.15:8080 + 10.0.0.12:9100"
             }
           ],
-          "text": "10.0.0.10:9100 + 10.0.0.14:8080",
+          "text": "10.0.0.12:9100 + 10.0.0.15:8080",
           "value": [
-            "10.0.0.10:9100",
-            "10.0.0.14:8080"
+            "10.0.0.12:9100",
+            "10.0.0.15:8080"
           ]
         },
         "datasource": "Prometheus",
@@ -469,5 +727,5 @@
   "timezone": "browser",
   "title": "Docker Swarm Node Monitoring",
   "uid": "aekIm_ggz",
-  "version": 22
+  "version": 5
 }

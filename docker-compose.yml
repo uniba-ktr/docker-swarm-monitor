@@ -62,7 +62,6 @@ services:
       - "-allow_dynamic_housekeeping=true"
       - "-docker_only=true"
       - "-storage_duration=30s"
-      - "-disable_metrics=disk,network"
     deploy:
       mode: global
       resources:
