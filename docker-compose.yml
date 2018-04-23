@@ -60,14 +60,16 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
     command:
-      - "-allow_dynamic_housekeeping=true"
+      - "-allow_dynamic_housekeeping=false"
+      - "-global_housekeeping_interval=30s"
+      - "-housekeeping_interval=5s"
       - "-docker_only=true"
       - "-storage_duration=30s"
     deploy:
       mode: global
       resources:
         limits:
-          memory: 32M
+          memory: 64M
         reservations:
           memory: 16M
 
